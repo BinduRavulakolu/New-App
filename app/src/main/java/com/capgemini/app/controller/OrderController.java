@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -65,19 +66,42 @@ public class OrderController {
 				HttpStatus.OK);
 		return responseEntity;
 	}
+	
+	@GetMapping("/orders/{orderId}")
+	public ResponseEntity<Order> getOrderById(@PathVariable int orderId)
+	{
+		ResponseEntity<Order> response=new ResponseEntity<Order>(orderService.getOrder(orderId),HttpStatus.OK);
+		return response;
+		
+	}
+	
+	@GetMapping("/orderss")
+	public ResponseEntity<List<Order>> getAllOrders()
+	{
+		
+		ResponseEntity<List<Order>> response=new ResponseEntity<List<Order>>(orderService.getOrders(),HttpStatus.OK);
+		return response;
+		
+	}
+	
 
+	
 	@GetMapping("/order/{orderId}")
-	public ResponseEntity<Order> cancelOrder(@PathVariable int orderId) {
-		ResponseEntity<Order> responseEntity = new ResponseEntity<Order>(orderService.cancelorder(orderId),HttpStatus.OK);
+	public ResponseEntity<Order> cancelOrder(@PathVariable int orderId,@RequestParam String status) {
+		ResponseEntity<Order> responseEntity = new ResponseEntity<Order>(orderService.cancelorder(orderId,status),HttpStatus.OK);
 		return responseEntity;
 	}
 	
-	@PutMapping("/order1")
+	@PutMapping("/order")
 	public ResponseEntity<Order> updateOrder(@RequestBody Order order) {
 	   ResponseEntity<Order> responseEntity=  new ResponseEntity<>(orderService.updateOrder(order), HttpStatus.OK);
 	   return responseEntity;
 	}
 	
-	
+	@GetMapping("/orderss/{orderId}")
+	public ResponseEntity<Order> deleteOrder(@PathVariable int orderId) {
+		ResponseEntity<Order> responseEntity = new ResponseEntity<Order>(orderService.deleteOrder(orderId),HttpStatus.OK);
+		return responseEntity;
+	}
 	
 }

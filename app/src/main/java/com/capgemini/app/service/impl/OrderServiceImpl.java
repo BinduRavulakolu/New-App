@@ -1,5 +1,6 @@
 package com.capgemini.app.service.impl;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,7 @@ public class OrderServiceImpl implements OrderService {
 	if(optional.isPresent())
 	{
 		optional.get().setStatus("updated");
-		return orderRepository.save(order);
+		return orderRepository.save(optional.get());
 	}
 	else
 	{
@@ -44,21 +45,35 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
-	public void deleteOrder(int orderId) {
-		orderRepository.deleteById(orderId);
+	public Order deleteOrder(int orderId) {
 		
-	}
-
-	@Override
-	public Order cancelorder(int orderId) {
 		Optional<Order> optional = orderRepository.findById(orderId);
 		if (optional.isPresent()) {
-			optional.get().setStatus("Cancelled");
-			return orderRepository.save(optional.get());
+			optional.get().setStatus("Deleted");
+//			return orderRepository.save(optional.get());
+			return optional.get();
 		}
 		return null;
 	}
 
+	@Override
+	public Order cancelorder(int orderId, String status) {
+		Optional<Order> optional = orderRepository.findById(orderId);
+		if (optional.isPresent()) {
+			optional.get().setStatus(status);
+//			return orderRepository.save(optional.get());
+			return optional.get();
+		}
+		return null;
+	}
+
+	@Override
+	public List<Order> getOrders() {
+		
+		return orderRepository.findAll();
+	}
+
+	
 	
 
 }
